@@ -40,19 +40,21 @@ final class ManualSwiftShield: Protector {
             let startIndex = content.index(content.startIndex, offsetBy: range.location)
             let endIndex = content.index(startIndex, offsetBy: range.length)
             let originalName = String(content[startIndex..<endIndex])
-            let obfuscatedName: String = {
-                guard let protected = obfsData.obfuscationDict[originalName] else {
-                    let protected = String.random(length: protectedClassNameSize,
-                                                  excluding: obfsData.allObfuscatedNames)
-                    obfsData.obfuscationDict[originalName] = protected
+            if originalName.hasSuffix(tag) && originalName != tag {
+                let obfuscatedName: String = {
+                    guard let protected = obfsData.obfuscationDict[originalName] else {
+                        let protected = String.random(length: protectedClassNameSize,
+                                                      excluding: obfsData.allObfuscatedNames)
+                        obfsData.obfuscationDict[originalName] = protected
+                        return protected
+                    }
                     return protected
-                }
-                return protected
-            }()
-            Logger.log(.protectedReference(originalName: originalName,
-                                           protectedName: obfuscatedName))
-            offset += obfuscatedName.count - originalName.count
-            content.replaceSubrange(startIndex..<endIndex, with: obfuscatedName)
+                }()
+                Logger.log(.protectedReference(originalName: originalName,
+                                               protectedName: obfuscatedName))
+                offset += obfuscatedName.count - originalName.count
+                content.replaceSubrange(startIndex..<endIndex, with: obfuscatedName)
+            }
         }
         return content
     }
