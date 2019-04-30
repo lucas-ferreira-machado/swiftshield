@@ -14,7 +14,6 @@ class fjiovh4894bvic: XbuinvcxoDHFh3fjid {
 }
 ```
 
-
 ## 🤖 Automatic mode (Swift only)
 
 With the `-automatic` tag, SwiftShield will use SourceKit to automatically obfuscate entire projects (including dependencies). Note that the scope of SwiftShield's automatic mode is directly related to the scope of Xcode's native refactoring tool, [which doesn't refactor everything yet](SOURCEKITISSUES.md). While the specific cases on the document won't be obfuscated, SwiftShield will obfuscate all Swift classes and methods that can be reverse-engineered. Take a look at the Example project to see SwiftShield in action!
@@ -44,6 +43,9 @@ class fjiovh4894bvic: XbuinvcxoDHFh3fjid {
 }
 ```
 
+## 🤖 Mixed mode (Automatic mode for Swift only projects and Manual mode for anothers subprojects)
+
+With the `-mixed` tag, SwiftShield will use SourceKit to automatically obfuscate entire projects (including dependencies) and manually every Objective-C sub project (and dependence) obfuscating everything that contains the tag.
 
 ## 💥 Deobfuscating encrypted Crash logs
 
@@ -128,6 +130,30 @@ swiftshield -project-root /app/MyApp
 - `-project-root`: The root of your project. SwiftShield will use this to search for your project files, storyboards and source files.
 
 **Optional Parameters:**
+
+- `-tag`: Uses a custom tag. Default is `__s`.
+
+
+### Mixed mode
+
+```
+swiftshield -mixed -project-root /app/MyApp -automatic-project-file /app/MyApp/MyApp.xcworkspace -automatic-project-scheme MyApp-AppStore -tag __obftag
+```
+**Required Parameters:**
+
+- `-mixed`: Enables automatic mode.
+
+- `-project-root`: The root of your project. SwiftShield will use this to search for your project files.
+
+- `-automatic-project-file`: Your app's main .xcodeproj/.xcworkspace file.
+
+- `-automatic-project-scheme myScheme`: The main scheme to build from your `-automatic-project-file`.
+
+**Optional Parameters:**
+
+- `-ignore-modules`: Prevent certain modules from being obfuscated, separated by a comma. Use this if a certain module can't be properly obfuscated. Note that this should be the exact name of the imported module (not the target name!). Example: `MyLib,MyAppRichNotifications,MyAppWatch_Extension`
+
+- `-show-sourcekit-queries`: Prints queries sent to SourceKit. Note that they are huge and will absolutely clutter your terminal, so use this only for bug reports and feature development!s
 
 - `-tag`: Uses a custom tag. Default is `__s`.
 

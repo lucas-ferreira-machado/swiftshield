@@ -24,6 +24,7 @@ if let filePathToDeobfuscate = UserDefaults.standard.string(forKey: "deobfuscate
     }
 }
 
+let mixed = CommandLine.arguments.contains("-mixed")
 let automatic = CommandLine.arguments.contains("-automatic")
 let dryRun = CommandLine.arguments.contains("-dry-run")
 
@@ -35,6 +36,12 @@ let protectedClassNameSize = obfuscationCharacterCount == 0 ? 32 : obfuscationCh
 
 let protector: Protector
 if automatic {
+    let schemeToBuild = UserDefaults.standard.string(forKey: "automatic-project-scheme") ?? ""
+    let projectToBuild = UserDefaults.standard.string(forKey: "automatic-project-file") ?? ""
+    let modulesToIgnore = UserDefaults.standard.string(forKey: "ignore-modules")?.components(separatedBy: ",") ?? []
+    let tag = UserDefaults.standard.string(forKey: "tag") ?? "__s"
+    protector = MixedSwiftShield(basePath: basePath, projectToBuild: projectToBuild, schemeToBuild: schemeToBuild, modulesToIgnore: Set(modulesToIgnore), dryRun: dryRun, tag: tag)
+} else if automatic {
     let schemeToBuild = UserDefaults.standard.string(forKey: "automatic-project-scheme") ?? ""
     let projectToBuild = UserDefaults.standard.string(forKey: "automatic-project-file") ?? ""
     let modulesToIgnore = UserDefaults.standard.string(forKey: "ignore-modules")?.components(separatedBy: ",") ?? []

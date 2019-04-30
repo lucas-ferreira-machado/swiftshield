@@ -91,7 +91,7 @@ enum LogType {
         case .verbose:
             return "Verbose Mode"
         case .mode:
-            return automatic ? "Automatic mode" : "Manual mode"
+            return mixed ? "Mixed mode" : automatic ? "Automatic mode" : "Manual mode"
         case .taggingProjects:
             return "-- Adding SWIFTSHIELDED=true to projects --"
         case let .tag(tag):

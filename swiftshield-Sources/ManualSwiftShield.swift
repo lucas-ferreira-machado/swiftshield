@@ -1,6 +1,6 @@
 import Foundation
 
-final class ManualSwiftShield: Protector {
+class ManualSwiftShield: Protector {
     let tag: String
 
     init(basePath: String, tag: String, protectedClassNameSize: Int, dryRun: Bool) {
@@ -17,7 +17,7 @@ final class ManualSwiftShield: Protector {
         return obfsData
     }
 
-    private func protect(file: File, obfsData: ObfuscationData) {
+    func protect(file: File, obfsData: ObfuscationData) {
         Logger.log(.checking(file: file))
         do {
             let fileString = try String(contentsOfFile: file.path, encoding: .utf8)
