@@ -35,7 +35,7 @@ let obfuscationCharacterCount = abs(UserDefaults.standard.integer(forKey: "obfus
 let protectedClassNameSize = obfuscationCharacterCount == 0 ? 32 : obfuscationCharacterCount
 
 let protector: Protector
-if automatic {
+if mixed {
     let schemeToBuild = UserDefaults.standard.string(forKey: "automatic-project-scheme") ?? ""
     let projectToBuild = UserDefaults.standard.string(forKey: "automatic-project-file") ?? ""
     let modulesToIgnore = UserDefaults.standard.string(forKey: "ignore-modules")?.components(separatedBy: ",") ?? []

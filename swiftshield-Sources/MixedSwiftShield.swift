@@ -59,7 +59,7 @@ class MixedSwiftShield: AutomaticSwiftShield {
         
         var hasObjcSubProject = false
         for xproj in subXProjects {
-            if xproj.isSwift  {
+            if !xproj.isSwift  {
                 hasObjcSubProject = true
                 break
             }

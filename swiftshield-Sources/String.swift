@@ -34,13 +34,13 @@ extension String {
     }
 
     static func random(length: Int, excluding: Set<String>) -> String {
+        let lowercaseLetters : NSString = "abcdefghijklmnopqrstuvwxyz"
         let letters : NSString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         let numbers : NSString = "0123456789"
-        let len = UInt32(letters.length)
         var randomString = ""
         for i in 0 ..< length {
-            let rand = arc4random_uniform(len)
-            let characters: NSString = i == 0 ? letters : letters.appending(numbers as String) as NSString
+            let characters: NSString = i == 0 ? lowercaseLetters : letters.appending(numbers as String) as NSString
+            let rand = arc4random_uniform(UInt32(characters.length))
             var nextChar = characters.character(at: Int(rand))
             randomString += NSString(characters: &nextChar, length: 1) as String
         }
