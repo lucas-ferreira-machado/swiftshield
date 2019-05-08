@@ -47,6 +47,16 @@ class fjiovh4894bvic: XbuinvcxoDHFh3fjid {
 
 With the `-mixed` tag, SwiftShield will use SourceKit to automatically obfuscate entire projects (including dependencies) and manually every Objective-C sub project (and dependence) obfuscating everything that contains the tag.
 
+NOTE: 💥XCode renamed ObjC bridged methods issues
+
+When one uses both Swift and Objective-C together, it’s well known that the bridging header helps make the connection between the two code bases while working to reconcile their differences. Objective-C class factory methods become a first class Swift initializer, and those insanelyLongEnumerationCaseNames becomes truncated names. Etcetera.
+
+And if you want to do something about that, then you’ll love the NS_SWIFT_NAME macro on it. For more details about NS_SWIFT_NAME topic see the topics:
+ 
+- https://medium.com/the-traveled-ios-developers-guide/ns-swift-name-fac3f3f2b102 by Jordan Morgan (https://medium.com/@JordanMorgan10) 
+
+- https://developer.apple.com/documentation/swift/objective-c_and_c_code_customization/renaming_objective-c_apis_for_swift by Apple Developer site.
+
 ## 💥 Deobfuscating encrypted Crash logs
 
 After succesfully encrypting your project, SwiftShield will generate an output folder containing a `conversionMap.txt` file containing with all the changes it made to your project. allowing you to pinpoint what an encrypted object really is.
