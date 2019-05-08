@@ -161,11 +161,14 @@ extension Protector {
             for path in swiftPaths {
                 var isDir : ObjCBool = false
                 let fullPath = (rootPath as NSString).appendingPathComponent(path)
-                if fileManager.fileExists(atPath: fullPath, isDirectory: &isDir) {
-                    if ignoreDirs == false || (ignoreDirs && isDir.boolValue == false) {
-                        result.append(fullPath)
+                if !fullPath.contains("Pods/") { // ignore pod files
+                    if fileManager.fileExists(atPath: fullPath, isDirectory: &isDir) {
+                        if ignoreDirs == false || (ignoreDirs && isDir.boolValue == false) {
+                            result.append(fullPath)
+                        }
                     }
                 }
+                
             }
         }
         return result.count > 0 ? result : nil
