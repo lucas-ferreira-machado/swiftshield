@@ -34,12 +34,13 @@ let basePath = UserDefaults.standard.string(forKey: "project-root") ?? ""
 let obfuscationCharacterCount = abs(UserDefaults.standard.integer(forKey: "obfuscation-character-count"))
 let protectedClassNameSize = obfuscationCharacterCount == 0 ? 32 : obfuscationCharacterCount
 
+let modulesToIgnore = UserDefaults.standard.string(forKey: "ignore-modules")?.components(separatedBy: ",") ?? []
+let tag = UserDefaults.standard.string(forKey: "tag") ?? "__s"
+
 let protector: Protector
 if mixed {
     let schemeToBuild = UserDefaults.standard.string(forKey: "automatic-project-scheme") ?? ""
     let projectToBuild = UserDefaults.standard.string(forKey: "automatic-project-file") ?? ""
-    let modulesToIgnore = UserDefaults.standard.string(forKey: "ignore-modules")?.components(separatedBy: ",") ?? []
-    let tag = UserDefaults.standard.string(forKey: "tag") ?? "__s"
     protector = MixedSwiftShield(basePath: basePath, projectToBuild: projectToBuild, schemeToBuild: schemeToBuild, modulesToIgnore: Set(modulesToIgnore), dryRun: dryRun, tag: tag)
 } else if automatic {
     let schemeToBuild = UserDefaults.standard.string(forKey: "automatic-project-scheme") ?? ""
@@ -47,8 +48,14 @@ if mixed {
     let modulesToIgnore = UserDefaults.standard.string(forKey: "ignore-modules")?.components(separatedBy: ",") ?? []
     protector = AutomaticSwiftShield(basePath: basePath, projectToBuild: projectToBuild, schemeToBuild: schemeToBuild, modulesToIgnore: Set(modulesToIgnore), protectedClassNameSize: protectedClassNameSize, dryRun: dryRun)
 } else {
-    let tag = UserDefaults.standard.string(forKey: "tag") ?? "__s"
-    protector = ManualSwiftShield(basePath: basePath, tag: tag, protectedClassNameSize: protectedClassNameSize, dryRun: dryRun)
+    let projectScheme = UserDefaults.standard.string(forKey: "project-scheme") ?? ""
+    let workspaceFilePath = UserDefaults.standard.string(forKey: "workspace-file") ?? ""
+    if !projectScheme.isEmpty &&
+        !workspaceFilePath.isEmpty {
+        protector = ManualWorkspaceSwiftShield(basePath: basePath, scheme: projectScheme, workspaceFilePath: workspaceFilePath, modulesToIgnore: Set(modulesToIgnore), dryRun: dryRun, tag: tag)
+    } else {
+        protector = ManualSwiftShield(basePath: basePath, tag: tag, protectedClassNameSize: protectedClassNameSize, dryRun: dryRun)
+    }
 }
 
 let obfuscationData = protector.protect()

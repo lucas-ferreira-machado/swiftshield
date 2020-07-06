@@ -71,13 +71,12 @@ class MixedSwiftShield: AutomaticSwiftShield {
             for xproj in subXProjects {
                 if xproj.isSwift == false {
                     let manualProtector = MixedManualSwiftShield(basePath: xproj.projectBasePath, tag: self.tag, protectedClassNameSize: manualProtectedClassNameSize, dryRun: self.dryRun, modulesToIgnore:self.modulesToIgnore, obfuscationData: obfuscationData)
-                    let manualObfuscationData = manualProtector.protect()
-                    mergeObfuscationData(obfuscationData, with: manualObfuscationData)
+                    obfuscationData.merge(with: manualProtector.protect())
                 }
             }
             
             let manualProtector = MixedManualSwiftShield(basePath: basePath, tag: self.tag, protectedClassNameSize: manualProtectedClassNameSize, dryRun: self.dryRun, modulesToIgnore:self.modulesToIgnore, obfuscationData: obfuscationData)
-            mergeObfuscationData(obfuscationData, with: manualProtector.protect())
+            obfuscationData.merge(with: manualProtector.protect())
 
             if dryRun == false {
                 writeToFile(data: obfuscationData);
@@ -151,7 +150,7 @@ final class MixedManualSwiftShield: ManualSwiftShield {
             return true
         }
         let obfsData = ObfuscationData(files: filteredFiles, storyboards: getStoryboardsAndXibs())
-        mergeObfuscationData(obfsData, with: self.obfuscationData)
+        obfsData.merge(with: self.obfuscationData)
         obfsData.files.forEach { protect(file: $0, obfsData: obfsData) }
         obfuscationData.files.forEach { protect(file: $0, obfsData: obfsData) }
         return obfsData
@@ -180,9 +179,9 @@ final class XProject {
     
 }
 
-func mergeObfuscationData( _ one: ObfuscationData, with: ObfuscationData) {
-    for (k, v) in with.obfuscationDict {
-        // If a key is already present it will be overritten
-        one.obfuscationDict[k] = v
-    }
-}
+//func mergeObfuscationData( _ one: ObfuscationData, with: ObfuscationData) {
+//    for (k, v) in with.obfuscationDict {
+//        // If a key is already present it will be overritten
+//        one.obfuscationDict[k] = v
+//    }
+//}

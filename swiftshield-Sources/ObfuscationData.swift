@@ -1,8 +1,8 @@
 import Foundation
 
 class ObfuscationData {
-    let files: [File]
-    let storyboards: [File]
+    var files: [File]
+    var storyboards: [File]
 
     var obfuscationDict: [String: String] = [:]
 
@@ -13,6 +13,23 @@ class ObfuscationData {
     init(files: [File] = [], storyboards: [File] = []) {
         self.files = files
         self.storyboards = storyboards
+    }
+    
+    func merge(with: ObfuscationData) {
+        for (k, v) in with.obfuscationDict {
+            // If a key is already present it will be overritten
+            self.obfuscationDict[k] = v
+        }
+        for file in with.files {
+            if !self.files.contains(file) {
+                self.files.append(file)
+            }
+        }
+        for file in with.storyboards {
+            if !self.storyboards.contains(file) {
+                self.storyboards.append(file)
+            }
+        }
     }
 }
 
