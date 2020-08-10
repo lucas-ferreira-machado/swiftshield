@@ -58,7 +58,7 @@ class ManualWorkspaceSwiftShield: Protector {
         }
         
         if dryRun == false {
-            writeToFile(data: obfuscationData);
+            writeToFile(data: obfuscationData, path: "Manual", info: "Manual mode")
         }
         
         return obfuscationData
